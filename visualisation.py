@@ -7,15 +7,13 @@ np.random.seed(5)
 
 n=200
 dims=[100,25,50]
-rot_amount = 0.01
+rot_amount = 0.025
 
 # Play with these booleans:
-add_basis = False
-constrain_first_axis = False
-constrain_second_axis = False
-scale_basis_by_significance = False
-
-
+add_basis = True
+constrain_first_axis = True
+constrain_second_axis = True
+scale_basis_by_significance = True
 
 coords_world = np.transpose([np.random.normal(scale=x,size=n) for x in dims])
 
@@ -41,8 +39,6 @@ if scale_basis_by_significance:
 else:
     S = np.asarray([100, 100, 100])
 
-
-print(S)
 
 x_basis = quaternion.rotate_vectors(viewport_quat, [1,0,0]) * S[0]
 y_basis = quaternion.rotate_vectors(viewport_quat, [0,1,0]) * S[1]
@@ -85,5 +81,11 @@ def update(frame):
     
     return (scatter)
 
-ani = animation.FuncAnimation(fig, func=update, interval=20, frames=10, cache_frame_data=False)
+ani = animation.FuncAnimation(fig, func=update, interval=50, frames=1, cache_frame_data=False)
+
+#writer = animation.PillowWriter(fps=10,
+#                                metadata=dict(artist='https://github.com/Threadnaught'),
+#                                bitrate=1800)
+#ani.save('gifs/s5.gif', writer=writer)
+
 plt.show()
