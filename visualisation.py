@@ -8,10 +8,10 @@ np.random.seed(5)
 n=200
 dims=[100,25,50]
 rot_amount = 0.01
-add_basis = True
-constrain_first_axis = True
-constrain_second_axis = True
-scale_basis_by_significance = True
+add_basis = False
+constrain_first_axis = False
+constrain_second_axis = False
+scale_basis_by_significance = False
 
 coords_world = np.transpose([np.random.normal(scale=x,size=n) for x in dims])
 
@@ -37,13 +37,17 @@ viewport_quat = quaternion.from_euler_angles([0,np.pi/4,np.pi/4])
 
 #basis vecs:
 
-if not scale_basis_by_significance:
+if scale_basis_by_significance:
+    S /= 5 # To fit better
+else:
     S = np.asarray([100, 100, 100])
 
 
-x_basis = quaternion.rotate_vectors(viewport_quat, [S[0],0,0])
-y_basis = quaternion.rotate_vectors(viewport_quat, [0,S[1],0])
-z_basis = quaternion.rotate_vectors(viewport_quat, [0,0,S[2]])
+print(S)
+
+x_basis = quaternion.rotate_vectors(viewport_quat, [1,0,0]) * S[0]
+y_basis = quaternion.rotate_vectors(viewport_quat, [0,1,0]) * S[1]
+z_basis = quaternion.rotate_vectors(viewport_quat, [0,0,1]) * S[2]
 
 lim = np.max(np.abs(coords_world)) * 1.1
 
