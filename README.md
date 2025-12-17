@@ -67,3 +67,8 @@ I have a confession to make; I have shown you the most boring type of ESD that e
 ![large-dimensional-histogram](./imgs/esd-hist-True-large-True-dist-heavy.png)
 
 The variance of the values in this case is infinite and the ESD follows a Power Law, which can be seen from all of those singular values hanging out on their own at the very high end. Generally, in neural networks, the specific type and shape of the power law can tell you alot about if your network is over or under fitting.
+
+### Further Reading:
+
+ - [Traditional and Heavy-Tailed Self Regularization in Neural Network Models](https://arxiv.org/abs/1901.08276) (Martin & Mahoney, 2019)
+ - [WeightWatcher](https://github.com/CalculatedContent/WeightWatcher) on GitHub
