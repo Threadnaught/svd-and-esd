@@ -28,7 +28,7 @@ Although SVD is not typically computed basis-by-basis, this mental model scales 
 
 ## Empirical Spectral Distribution
 
-How can we generalise this kind of analysis to higher than three spatial dimensions? The vector spaces become hard to visualise in 3D space, but remains meaningful. Let's focus on one type of analysis which can be perfomed, taking the Empirical Spectral Distribution (ESD). 
+How can we generalise this kind of analysis to higher than three spatial dimensions? The vector spaces become hard to visualise past 3 dimensions, but SVD remains useful. Let's focus on one type of analysis which can be perfomed, taking the Empirical Spectral Distribution (ESD). 
 
 When we use numpy to compute the SVD in `coords_and_svd.py`, we get three cryptically named outputs;
 
@@ -44,9 +44,9 @@ coords_world = np.matmul(coords_world, Vh)
 ```
 
 - `S` contains the singular values (I call them 'significance' above). It's how long we portrayed our basis vectors to be in the last visualisation. For each of the basis vectors in Vh, it tells us how important they are to describing the variance of the data.
-- Finally, `U` represents for each of our input points how much of each of our basis vectors we need to use to recover them. Unlike `Vh` and `S`, this part of the analysis is not aggregated and gives one output per input vector.
+- Finally, `U` represents for each of our input points how much of each of our basis vectors we need to use to construct them. Unlike `Vh` and `S`, this part of the analysis is not aggregated and gives one output per input vector.
 
-ESD analysis only considers the values of `S`, as this is a flat 1-dimensional vector. Remember, it's how much we scaled each of our basis vectors by in our visualisation to show the influence of each on the visualisation. Let's take those scaled vectors and lay them flat, horizontal, and staring from the same X coordinate.
+ESD analysis only considers the values of `S`, as this is a flat 1-dimensional vector. Remember, in the visualisation it was how much we scaled each of our basis vectors to show the influence of each. Let's take those scaled vectors and lay them flat, horizontal, and starting from the same X coordinate.
 
 ![vectors laid flat](./imgs/esd-hist-False-large-False.png)
 
