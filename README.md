@@ -57,5 +57,6 @@ Et voila, we can see the worlds most pointless histogram. Because we only have t
 
 ![large-dimensional-histogram](./imgs/esd-hist-True-large-True.png)
 
-And here is the magic of the ESD; we can take a vector space far too large to be reasoned about visually, but still make meaningful conclusions about the structure of the underlying space. There is clearly a statistical pattern here, and we can treat it as a statistical distribution and use all of the tools of statistics to analyse what's going on.
+And here is the magic of the ESD; we can take a vector space far too large to be reasoned about visually, but still make meaningful conclusions about the structure of the underlying space. There is clearly a pattern here, and we can treat it as a statistical distribution and use all of the tools of statistics to analyse what's going on.
 
+ESD analysis is usually introduced about towards the beginning of a course on Random Matrix Theory (RMT), surrounded by derrivations and notation. While those are of couse useful, there is a real risk of leaving such a course without any intuitive sense of what's actually going on inside of these operations and spaces.
