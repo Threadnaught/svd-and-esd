@@ -1,7 +1,7 @@
 # Singular Value Decomposition and the Empirical Spectral Distribution
 ## SVD visualisation
 
-> In this section, we will be working in `./svd_visualization.py` and `coords_and_svd.py`. We are also using zero-based indexing, because I am a programmer.
+> In this section, we will be working in `./svd_visualization.py` and `./coords_and_svd.py`. We are also using zero-based indexing, because I am a programmer.
 
 SVD is a tool which allows you to find which dimensions in a dataset have a lot of variance. What does that actually mean? Let's take the following set of 200 points in 3D space;
 
@@ -34,6 +34,8 @@ You can also now see how SVD computes a rotation, essentially constructing a com
 Something to notice in this visualisation is that the basis vectors are not the same length. This is not true of the output of the raw SVD algorithm, which produces unit basis vectors, but here they are scaled by a set of another set of outputs of the SVD algorithm, the `S` values. These are technically known as the singular values, but I like to call them significance in my head. You can see that the zeroth is the highest significance, the first the next highest, and the final the least. I'll note here that SVD is typically computed all at once rather than basis by basis, but this model is very useful in thinking about what exactly SVD is doing. If we had 100-Dimensional data, it would produce 100 perpendicular basis vectors with 100 significance levels.
 
 ## Empirical Spectral Distribution
+
+> In this section, we will be working in `./empirical_spectral_distribution.py` and `./coords_and_svd.py`.
 
 How can we generalise this kind of analysis to higher than three spatial dimensions? The vector spaces become hard to visualise past 3 dimensions, but SVD remains useful. Let's focus on one type of analysis which can be performed, taking the Empirical Spectral Distribution (ESD). 
 
