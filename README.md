@@ -19,7 +19,7 @@ In 3D space, we still have an entire plane of vectors to choose from for our sec
 
 ![We have a plane of possibilities for the first basis vector](./gifs/first-basis-possibilities.gif)
 
-We can, however, repeat a version of the same trick we applied to find the zeroth basis vector. We find the line which, knowing where the point sits on the zeroth basis vector, tells us the most about where the point is in 3D space.
+We can, however, repeat a version of the same trick we applied to find the zeroth basis vector. We find the line which, knowing where the point sits on the plane defined by the zeroth and first basis vectors, tells us the most about where the point is in 3D space.
 
 ![The first basis vector has been applied](./gifs/first-basis-applied.gif)
 
@@ -31,7 +31,7 @@ Because we have a 3D input space, and a 3D output space, knowing the closest poi
 
 You can also now see how SVD computes a rotation, essentially constructing a complete coordinate system for our data. 
 
-Something to notice in this visualisation is that the basis vectors are not the same length. This is not true of the output of the raw SVD algorithm, which produces unit basis vectors, but here they are scaled by a set of another set of outputs of the SVD algorithm, the `S` values. These are technically known as the singular values, but I like to call them significance in my head. You can see that the zeroth is the highest significance, the first the next highest, and the final the least. If we had 100-Dimensional data, it would produce 100 perpendicular basis vectors with 100 significance levels, starting with the most end ending with the least significant.
+Something to notice in this visualisation is that the basis vectors are not the same length. This is not true of the output of the raw SVD algorithm, which produces unit basis vectors, but here they are scaled by a set of another set of outputs of the SVD algorithm, the `S` values. These are technically known as the singular values, but I like to call them significance in my head. You can see that the zeroth is the highest significance, the first the next highest, and the final the least. If we had 100-Dimensional data, it would produce 100 perpendicular basis vectors with 100 significance levels, starting with the most and ending with the least significant.
 
 > SVD is typically computed all at once rather than basis by basis, but this model is very useful in thinking about what exactly SVD is doing.
 
