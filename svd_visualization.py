@@ -5,10 +5,15 @@ import quaternion
 from coords_and_svd import n, coords_world, S, Vh
 
 # Play with these booleans:
-add_basis = False
-constrain_first_axis = False
-constrain_second_axis = False
-scale_basis_by_significance = False
+scale_basis_by_significance = True
+
+show_zeroth_basis = True
+show_first_basis_possiblities = False
+show_first_basis = True
+show_second_basis = True
+
+# We're handling the bases collectively, bools above are mostly for convinience of experimenter
+show_basis = [show_zeroth_basis, show_first_basis, show_second_basis]
 
 rot_amount = 0.025
 
@@ -21,16 +26,14 @@ rotation_quat = quaternion.slerp(np.quaternion(1,0,0,0), full_rotation_quat, 0, 
 viewport_quat = quaternion.from_euler_angles([0,np.pi/4,np.pi/4])
 
 #basis vecs:
-
 if scale_basis_by_significance:
     S /= 5 # To fit better
 else:
     S = np.asarray([100, 100, 100])
 
+basis_vecs = np.diag(S)
+first_basis_possibilities = np.asarray([[0, np.sin(th), np.cos(th)] for th in np.arange(0, 2*np.pi, 0.1*np.pi)]) * 50
 
-x_basis = quaternion.rotate_vectors(viewport_quat, [1,0,0]) * S[0]
-y_basis = quaternion.rotate_vectors(viewport_quat, [0,1,0]) * S[1]
-z_basis = quaternion.rotate_vectors(viewport_quat, [0,0,1]) * S[2]
 
 lim = np.max(np.abs(coords_world)) * 1.1
 
@@ -40,34 +43,47 @@ ax = fig.add_subplot()
 ax.axis('off')
 
 #plot pointss (zero because draw logic is in update)
-scatter = ax.scatter(np.zeros(n), np.zeros(n))
+scatter = ax.scatter(np.zeros(n), np.zeros(n), color='black')
 ax.set_xlim(-lim, lim)
 ax.set_ylim(-lim, lim)
 
-# Add the basis vectors:
-if add_basis:
-    x_pl = ax.plot([0,x_basis[0]], [0,x_basis[1]], 'r')
-    y_pl = ax.plot([0,y_basis[0]], [0,y_basis[1]], 'g')
-    z_pl = ax.plot([0,z_basis[0]], [0,z_basis[1]], 'b')
+# All basis plots start out as zero length, so we can plot them all from the start and only update once needed
+basis_plots = [
+    ax.plot([0,0], [0,0], c)[0] for c in ['r', 'g', 'b']
+]
 
-if constrain_first_axis:
-    # Kill all rotation except around the 0th axis
-    unconstrained_rot_vector = quaternion.as_rotation_vector(rotation_quat)
-    rotation_quat = quaternion.from_rotation_vector([unconstrained_rot_vector[0], 0, 0])
+if show_first_basis_possiblities:
+    first_basis_possible_plots = [
+        ax.plot([0,0], [0,0], 'g')[0] for _ in range(len(first_basis_possibilities))
+    ]
 
-if constrain_second_axis:
-    # Kill all rotation except around the 1st axis
-    unconstrained_rot_vector = quaternion.as_rotation_vector(rotation_quat)
-    rotation_quat = quaternion.from_rotation_vector([0, unconstrained_rot_vector[1], 0])
-
+    
 def update(frame):
-    global coords_world
+    global coords_world, basis_vecs, first_basis_possibilities
     coords_world = quaternion.rotate_vectors(rotation_quat, coords_world)
     coords_viewport = quaternion.rotate_vectors(viewport_quat, coords_world)
+    
+    updates = [scatter]
+
+    basis_vecs = quaternion.rotate_vectors(rotation_quat, basis_vecs)
+    basis_vecs_viewport = quaternion.rotate_vectors(viewport_quat, basis_vecs)
+
+    first_basis_possibilities = quaternion.rotate_vectors(rotation_quat, first_basis_possibilities)
+    first_basis_possibilities_viewport = quaternion.rotate_vectors(viewport_quat, first_basis_possibilities)
+
+    for i in range(3):
+        if show_basis[i]:
+            basis_plots[i].set_data([0, basis_vecs_viewport[i,0]], [0, basis_vecs_viewport[i,1]])
+            updates.append(basis_plots[i])
+    
+    if show_first_basis_possiblities:
+        for i in range(len(first_basis_possibilities)):
+            first_basis_possible_plots[i].set_data([0, first_basis_possibilities_viewport[i,0]], [0, first_basis_possibilities_viewport[i,1]])
+            updates.append(first_basis_possible_plots[i])
      
     scatter.set_offsets(coords_viewport[:,:2])
     
-    return (scatter)
+    return updates
 
 ani = animation.FuncAnimation(fig, func=update, interval=50, frames=1, cache_frame_data=False)
 
