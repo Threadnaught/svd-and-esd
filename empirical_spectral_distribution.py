@@ -5,13 +5,16 @@ from coords_and_svd import n, coords_world, S, Vh
 plot_hist = True
 large_dim_dataset = True
 dist = 'heavy'
+fit_power_law = True
 
 if large_dim_dataset:
     if dist == 'norm':
         coords_world = np.random.normal(size=[1000, 1000])
     elif dist == 'heavy':
-        coords_world = np.random.standard_t(1.8, (1000, 1000))
-
+        # Repeatedly multiplying normally distributed matrices produces heavy tailed ones.
+        coords_world = np.random.normal(size=[1000, 1000])
+        for _ in range(3):
+            coords_world = np.matmul(coords_world, np.random.normal(size=[1000, 1000]))
     U, S, Vh = np.linalg.svd(coords_world)
 
 if not large_dim_dataset:
