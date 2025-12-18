@@ -1,30 +1,37 @@
 # Singular Value Decomposition and the Empirical Spectral Distribution
-## Singular Value Decomposition visualisation
+## SVD visualisation
 
-`./svd_visualization.py` is a tool to help wrap your head around what exactly the SVD does by explaining it as rotation, in this case in 3D space;
+> In this section, we will be working in `./svd_visualization.py` and `coords_and_svd.py`. We are also using zero-based indexing, because I am a programmer.
 
- - Our data initially exists without any obvious coordinate system applied to it, and it's spinning freely through space. We can see that the data is pancake shaped, with a lot more variance in one axis than the other two.
+SVD is a tool which allows you to find which dimensions in a dataset have a lot of variance. What does that actually mean? Let's take the following set of 200 points in 3D space;
 
-![Stage one](./gifs/s1.gif)
+![The bare, unanalysed space](./gifs/bare-space.gif)
 
- - When the first boolean flag (`add_basis`) is flipped to true, we see a set of three basis vectors which would represent our coordinate system. but our data is still unconstrained by it.
+Our data initially exists without any obvious coordinate system applied to it, and it's spinning through space. Or perhaps we're spinning around it; the two are identical from our perspective. The goal is impose a coordinate system onto this data in which the zeroth coordinate has the most variance, the next coordinate has the next most, et cetera. We can see that in our case, the data is pancake shaped, with more variance in one direction than others. Let's take that direction as our zeroth 'basis vector', that is the zeroth coordinate in the system that we are constructing.
 
-![Stage two](./gifs/s2.gif)
+![The zeroth basis vector has been applied](./gifs/zeroth-basis-applied.gif)
 
- - When the second boolean flag (`constrain_first_axis`) is flipped to true, we see that the direction of maximum variance has been constrained to the first (red) basis vector, but it is still free to rotate around the other two.
+What does this choice of basis vector mean in practise? It is chosen so that, if we were to pick one of our points in the data, simply knowing the closest point on this 1D line would give the best guess on where that point lies in the wider space. If we were to draw this line in a different direction, and there are infinitely many to choose from, we would have a worse guess. 
 
-![Stage three](./gifs/s3.gif)
+But even our mathematically optimal zeroth basis vector still can't yield a great guess, so how do we go about selecting another? Here, we can take advantage of a simple fact, our next basis vector has to be perpendicular to the zeroth. If it wasn't, there would be redundant information between the two basis vectors. This also arises from the fact that SVD computes a rotation, but that's a rabbit hole we can leave until later.
 
- - When the third boolean flag (`constrain_second_axis`) is flipped to true, we see that all rotation has been removed. We have set the second basis vector to the one perpendicular to the first basis vector which describes the highest remaining variance.
+In 3D space, we still have an entire plane of vectors to choose from for our second basis vector.
 
-![Stage four](./gifs/s4.gif)
+![We have a plane of possibilities for the first basis vector](./gifs/first-basis-possibilities.gif)
 
- - The Third basis vector, therefore, takes up any variance not explained by the first two as we have no more dimensions left to play with.
- -  When the fourth boolean flag is flipped (`scale_basis_by_significance`), we see how much variance is explained by each basis.
+We can, however, repeat a version of the same trick we applied to find the zeroth basis vector. We find the line which, knowing where the point sits on the zeroth basis vector, tells us the most about where the point is in 3D space.
 
-![Stage five](./gifs/s5.gif)
+![The first basis vector has been applied](./gifs/first-basis-applied.gif)
 
-Although SVD is not typically computed basis-by-basis, this mental model scales to higher dimensions and I found it very useful in understanding what exactly is going on.
+Where do we go from here? Well, we are lucky enough to be living in a 3D space. In 3D space, given two vectors, there is only one vector perpendicular to both of them. Well, technically there are two (up and down) but they would simply yield an inverted sign. Let's apply that last basis vector now.
+
+![The second basis vector has been applied](./gifs/second-basis-applied.gif)
+
+Because we have a 3D input space, and a 3D output space, knowing the closest point on any of these three basis vectors tells us where the data is in 3D space. SVD is sometimes used for a type of lossy compression known as dimensional reduction. If you were to flatten all the points so that you only knew their position relative to the zeroth and first basis vector, you could still have a pretty good guess of where the point is in 3D space while only having to communicate two dimensions. 
+
+You can also now see how SVD computes a rotation, essentially constructing a complete coordinate system for our data. 
+
+Something to notice in this visualisation is that the basis vectors are not the same length. This is not true of the output of the raw SVD algorithm, which produces unit basis vectors, but here they are scaled by a set of another set of outputs of the SVD algorithm, the `S` values. These are technically known as the singular values, but I like to call them significance in my head. You can see that the zeroth is the highest significance, the first the next highest, and the final the least. I'll note here that SVD is typically computed all at once rather than basis by basis, but this model is very useful in thinking about what exactly SVD is doing. If we had 100-Dimensional data, it would produce 100 perpendicular basis vectors with 100 significance levels.
 
 ## Empirical Spectral Distribution
 
