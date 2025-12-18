@@ -1,4 +1,4 @@
-# Singular Value Decompposition and the Empirical Spectral Distribution
+# Singular Value Decomposition and the Empirical Spectral Distribution
 ## Singular Value Decomposition vizualisation
 
 `./svd_visualization.py` is a tool to help wrap your head around what exactly the SVD does by explaining it as rotation, in this case in 3D space;
