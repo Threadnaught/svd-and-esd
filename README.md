@@ -75,9 +75,13 @@ ESD analysis is usually introduced towards the beginning of a course on Random M
 
 I have a confession to make; I have shown you the most boring type of ESD that exists. We've used a mathematical tool designed to measure correlation and structure to look at a matrix without any of either. The ESD distribution that we saw above in the uncorrelated and normally distributed case is called the Marchenko–Pastur (MP) law. Let's multiply a series of these matrices together and see what happens.
 
-![large-dimensional-histogram](./imgs/esd-hist-True-large-True-dist-heavy.png)
+![heavy-tailed-histogram](./imgs/esd-hist-True-large-True-dist-heavy.png)
 
-This is the mythical Heavy-Tailed matrix. The distribution of singular values here follow a power law, which can be seen from all of those singular values hanging out on their own at the very high end. When a neural network is training well, your singular values tend to look a little like this. The specific type and shape of the power law can tell you a lot about how the layers of your networks are training.
+This is the mythical Heavy-Tailed matrix. The distribution of singular values here follow a power law, which can be seen from all of those singular values hanging out on their own at the very high end. When a neural network is training well, your singular values tend to look a little like this. The specific type and shape of the power law can tell you a lot about how the layers of your networks are training. It's a bit smushed, though, let's view it with a log y-axis;
+
+![heavy-tailed-histogram-log](./imgs/esd-hist-True-large-True-dist-heavy-log.png)
+
+As we can see, it's not a perfect match for a log scale, which should be a straight line, but it's not far off especially in the middle bit.
 
 ### Further Reading:
 

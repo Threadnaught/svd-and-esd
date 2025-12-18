@@ -6,6 +6,7 @@ plot_hist = True
 large_dim_dataset = True
 dist = 'heavy'
 fit_power_law = True
+log = True
 
 if large_dim_dataset:
     if dist == 'norm':
@@ -30,11 +31,11 @@ ax.spines['right'].set_visible(False)
 plt.xlabel('Singular value')
 
 if plot_hist:
-    plt.hist(S, bins=50, color='black')
+    plt.hist(S, bins=50, color='black', log=True)
     plt.ylabel('Count')
 else:    
     ax.spines['left'].set_visible(False)
     plt.yticks([])
 
-plt.savefig('imgs/esd-hist-%r-large-%r-dist-%s.png' % (plot_hist, large_dim_dataset, dist))
+plt.savefig('imgs/esd-hist-%r-large-%r-dist-%s%s.png' % (plot_hist, large_dim_dataset, dist, '-log' if log else ''))
 plt.show()
