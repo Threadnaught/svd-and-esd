@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 from coords_and_svd import coords_world
 from weightwatcher.WW_powerlaw import WWFit
 
-dist = 'alexnet'
+dist = 'heavy'
 plot_hist = True
 log = True
 fit_power_law = True
+
+alpha = 2.5
+x_min = 10
 
 if dist == '3d':
     coords = coords_world
@@ -29,8 +32,6 @@ elif dist == 'heavy':
     # https://stats.stackexchange.com/a/406705
     
     # Generate target singular values:
-    alpha = 2.5
-    x_min = 10
     inv_cdf = lambda x: x_min * (x ** (-1 / (alpha - 1)))
     singular_values = inv_cdf(np.random.uniform(size=[1000]))
    
@@ -71,10 +72,17 @@ if plot_hist:
     plt.ylabel('Density')
     if fit_power_law:
         fit = WWFit(S)
-        print(fit)
-        #print(dir(fit))
-        plt.vlines(fit.xmin, *plt.ylim())
+        print('Power law fit', fit)
+        
+        pdf_fit = lambda x: ((fit.alpha - 1) / fit.xmin) * (x / fit.xmin) ** (-fit.alpha)
+        pdf_ground = lambda x: ((alpha - 1) / x_min) * (x / x_min) ** (-alpha)
+        xs = np.linspace(fit.xmin, np.max(S), 100)
 
+        plt.plot(xs, pdf_ground(xs), 'r--', label='Ground truth power law')
+        plt.plot(xs, pdf_fit(xs), 'r', label='Fit power law')
+
+        plt.vlines(fit.xmin, *plt.ylim(), 'blue', label='Fit x_min')
+        plt.legend()
 else:    
     ax.spines['left'].set_visible(False)
     plt.yticks([])

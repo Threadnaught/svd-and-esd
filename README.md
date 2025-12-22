@@ -69,7 +69,7 @@ Et voila, we can see the worlds most pointless histogram. Because we only have t
 
 Let's do something more interesting which shows the power of ESD to analyse very large vector spaces. Instead of working in a 3D space, let's instead work in a 1000D space, and then take 1000 vectors to analyse. The values in each row and column of this input matrix are all sampled from the same normal distribution. This means that they are statistically identical. They are also uncorrelated, meaning they are independent. This is a special type of matrix known as an independent and identically distributed (IID) matrix. When we look at distribution of the SVD singular values, we see;
 
-![large-dimensional-histogram](./imgs/esd-norm-hist.png)
+![large dimensional histogram](./imgs/esd-norm-hist.png)
 
 And here is the magic of the ESD; we can take a vector space far too large to be reasoned about visually, but still make meaningful conclusions about the structure of the underlying space. There is clearly a pattern here, and we can treat the singular values as a distribution and use all of the tools of statistics to analyse what's going on.
 
@@ -77,15 +77,37 @@ ESD analysis is usually introduced towards the beginning of a course on Random M
 
 I have a confession to make; I have shown you the most boring type of ESD that exists. We've used a mathematical tool designed to measure correlation and structure to look at a matrix without any of either. The ESD distribution that we saw above in the IID normally distributed case follows the Marchenko–Pastur (MP) law. Let's look at a matrix which I prepared earlier.
 
-![heavy-tailed-histogram](./imgs/esd-heavy-hist.png)
+![heavy tailed histogram](./imgs/esd-heavy-hist.png)
 
 This is the mythical power law Heavy-Tailed matrix. Unfortunately, a lot of the detail has been blown out by the massive spike of low singular values. Let's fix that with a log scale; 
 
-![heavy-tailed-histogram-log](./imgs/esd-heavy-hist-log.png)
+![heavy tailed histogram log](./imgs/esd-heavy-hist-log.png)
 
 The distribution of singular values here follow a power law, which can be seen from all of those singular values hanging out on their own at the very high end. When a neural network is training well, your singular values tend to look a little like this. The specific type and shape of the power law can tell you a lot about how the layers of your networks are training.
 
-> A confession; power law Heavy-Tailed matrices are confusing. This project (beautifully) taught me that I didn't understand them as well as I thought I did. The above section previously displayed a lognormal-ish matrix which failed to fit a power law at all. At one point, I even relented and constructed one which did fit with gradient descent, which is machine learning speak for 'I don't know how to make this analytically'. The approach I used in the end was actually very simple (albeit heavily commented), if you want to see it take a look at the block that starts `elif dist == 'heavy':` in `./empirical_spectral_distribution.py`.
+> A confession; power law Heavy-Tailed matrices are confusing. This project (beautifully) taught me that I didn't understand them as well as I thought I did. The above section previously displayed a lognormal-ish matrix which failed to fit a power law at all. At one point, I even relented and constructed a correct one with gradient descent, which is machine learning speak for 'I don't know how to make this analytically'. The analytical approach I used in the end was actually very simple (albeit heavily commented), if you want to see it take a look at the block that starts `elif dist == 'heavy':` in `./empirical_spectral_distribution.py`.
+
+Okay, I keep saying 'power law', but how do we know what that means? The power law distribution used here is parameterised by two variables - `x_min`, which dictates the lower bound, and `alpha`, which causes the tail to drop off faster when increased. If we use WeightWatcher's builtin fitter to measure the properties of the ESD's power law, we get the following output;
+
+```
+WWFit(power_law xmin: 10.0146, alpha: 2.6218, sigma: 0.0513, data: 999)
+```
+
+And what were the params of the power law we constructed the curve with?
+
+```
+x_min = 10
+alpha = 2.5
+```
+
+What does this look like in practise? Let's plot this fit line against the ground truth that we were drew our singular values from.
+
+![heavy tailed histogram log and fitted power law](./imgs/esd-heavy-hist-log-pl.png)
+
+That's not far off. Obviously, 'not far off' is not a statistically valid concept and we would need to test a lot of different `x_min`s and `alpha`s to build more confidence than this simple gut check. From this example, however, we can see one of the things that makes power laws hard to fit;
+
+ - At low values, there is a lot of data and the curve matches closely
+ - At high values, the distribution thins out a lot, leading to larger and larger divergence between the fit curve and ground truth as we move towards the right of the graph.
 
 ### Further Reading:
 
