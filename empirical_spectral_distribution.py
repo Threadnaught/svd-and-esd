@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from coords_and_svd import coords_world
 from weightwatcher.WW_powerlaw import WWFit
 
-dist = 'heavy'
+dist = 'alexnet'
 plot_hist = True
 log = True
 fit_power_law = True
@@ -78,7 +78,9 @@ if plot_hist:
         pdf_ground = lambda x: ((alpha - 1) / x_min) * (x / x_min) ** (-alpha)
         xs = np.linspace(fit.xmin, np.max(S), 100)
 
-        plt.plot(xs, pdf_ground(xs), 'r--', label='Ground truth power law')
+        if dist == 'norm':
+            plt.plot(xs, pdf_ground(xs), 'r--', label='Ground truth power law')
+
         plt.plot(xs, pdf_fit(xs), 'r', label='Fit power law')
 
         plt.vlines(fit.xmin, *plt.ylim(), 'blue', label='Fit x_min')
