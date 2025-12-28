@@ -1,5 +1,7 @@
 # Singular Value Decomposition and the Empirical Spectral Distribution
 
+The Empirical Spectral Distribution has shown remarkable power in analysing how neural networks are learning, and it can do this on individual layers without any knowledge of the networks training data or even intended purpose. Here, we construct the ESD from first(ish) principles starting with an explanation of SVD.
+
 ## Installing
 
 This section is only required if you want to actually run the code samples, rather than just reading.
