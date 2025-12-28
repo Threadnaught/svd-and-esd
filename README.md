@@ -111,7 +111,26 @@ Obviously, 'not far off' is not a statistically valid concept and we would need 
 
 This explains why `x_min` has been fitted much better than `alpha`.
 
+Okay. Now let's try this analysis on a layer from a real, trained network; we're going to take the final layer from a pretrained AlexNet image classifier. This layer is dense, meaning it's implemented as a matrix multiplication by the layer weights followed by addition by the layer bias. Let's plot a histogram of the singular values of our weights without fitting a power law.
+
+![ESD of the final layer of AlexNet](./imgs/esd-alexnet-hist-log.png)
+
+We only have one more transformation to apply before we can fit our power law. ESDs come in a few flavours which encode the same information in different ways, we have SVD singular values (what we've been using so far) and the correlation matrix eigenvalues. The relationship between SVD singular values and correlation matrix eigenvalues are analogous to the relationship between standard deviation and variance. They encode the same information, but some statistical operations are expressed more naturally in one than the other. 
+
+Given a sample of the SVD singular values, we can get a sample of the layer correlation eigenvalues **simply by squaring it**. Another analogy to consider is the difference between speed and kinetic energy - some calculations are easier in one form than the other. Let's square our singular values, and fit a power law.
+
+![ESD of the  final layer of AlexNet with a fitted power law](./imgs/esd-alexnet-hist-log-pl-sq.png)
+
+Interesting. Something to notice is that when we're dealing with a real network, we rarely actually fit _all_ of the singular values. The is section below the fit `x_min` does not fit our power low. This is usually dismissed as noise in our analysis. Let's look at the parameters of our fit.
+
+```
+WWFit(power_law xmin: 2.0464, alpha: 3.0199, sigma: 0.1523, data: 176)
+```
+
+Beautiful. For more information on interpreting these alpha values, take a look at the references below.
+
 ### Further Reading:
 
  - [Traditional and Heavy-Tailed Self Regularization in Neural Network Models](https://arxiv.org/abs/1901.08276) (Martin & Mahoney, 2019)
  - [WeightWatcher](https://github.com/CalculatedContent/WeightWatcher) on GitHub
+ - [AlexNet]

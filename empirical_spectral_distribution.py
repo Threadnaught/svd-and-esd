@@ -1,12 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from coords_and_svd import coords_world
+import weightwatcher as ww
 from weightwatcher.WW_powerlaw import WWFit
+
 
 dist = 'alexnet'
 plot_hist = True
 log = True
 fit_power_law = True
+full_ww_fit = False # Debug option to validate our calculations vs ww
+square_s = True
 
 alpha = 2.5
 x_min = 10
@@ -44,16 +48,38 @@ elif dist == 'heavy':
     V = rand_ortho()
 
     coords = np.matmul(U, np.matmul(sigma, np.transpose(V)))
-elif dist == 'alexnet':
+elif dist == 'alexnet' or dist == 'resnet':
     import torch
     import torchvision
-    model = torch.hub.load('pytorch/vision:v0.24.1', 'alexnet', pretrained=True)
-    model.eval() 
-    coords = model.classifier[4].state_dict()['weight'].numpy()
+
+    layer_filter = []
+    
+    if dist == 'alexnet':
+        model = torch.hub.load('pytorch/vision:v0.24.1', 'alexnet', pretrained=True)
+        model.eval()
+        coords = model.classifier[6].state_dict()['weight'].numpy()
+        layer_filter = [23]
+    elif dist == 'resnet':
+        model = torch.hub.load('pytorch/vision:v0.24.1', 'resnet18', pretrained=True)
+        model.eval()
+        coords = model.fc.state_dict()['weight'].numpy()
+   
+    if full_ww_fit:
+        watcher = ww.WeightWatcher(model=model)
+        details = watcher.analyze(layers=layer_filter)
+        summary = watcher.get_summary(details)
+
+        print(summary)
+        print(details)
+        #exit()
+    
 else:
     raise Exception('unrecognised distribution %s' % dist)
 
 U, S, Vh = np.linalg.svd(coords)
+
+if square_s:
+    S = S ** 2
 
 if dist == '3d':
     plt.plot([0,S[0]], [0.013, 0.013], 'r')
@@ -65,7 +91,7 @@ ax = plt.gca()
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.xlabel('Singular value')
+plt.xlabel('Singular value' + ' squared' if square_s else '')
 
 if plot_hist:
     plt.hist(S, bins=50, color='black', density=True, log=log)
@@ -89,11 +115,12 @@ else:
     ax.spines['left'].set_visible(False)
     plt.yticks([])
 
-plt.savefig('imgs/esd%s%s%s%s.png' % (
+plt.savefig('imgs/esd%s%s%s%s%s.png' % (
     '-' + dist,
     '-hist' if plot_hist else '',
     '-log' if log else '',
-    '-pl' if fit_power_law else ''
+    '-pl' if fit_power_law else '',
+    '-sq' if square_s else ''
 ))
 
 plt.show()
