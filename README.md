@@ -1,7 +1,29 @@
 # Singular Value Decomposition and the Empirical Spectral Distribution
+
+## Installing
+
+This section is only required if you want to actually run the code samples, rather than just reading.
+
+<details>
+First time install:
+
+```
+python -m venv .venv
+pip install -r requirements.txt
+pip install -r requirements-pytorch.txt
+source .venv/bin/activate 
+```
+
+Then, each time you open a new terminal;
+
+```
+source .venv/bin/activate
+```
+</details>
+
 ## SVD visualisation
 
-> In this section, we will be working in `./svd_visualization.py` and `./coords_and_svd.py`. We are also using zero-based indexing, because I am a programmer.
+> In this section, we will be working in `./svd_visualisation.py` and `./coords_and_svd.py`. We are also using zero-based indexing, because I am a programmer.
 
 SVD is a tool which allows you to find which dimensions in a dataset have a lot of variance. What does that actually mean? Let's take the following set of 200 points in 3D space;
 
