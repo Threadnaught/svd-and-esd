@@ -117,7 +117,7 @@ Okay. Now let's try this analysis on a layer from a real, trained network; we're
 
 We only have one more transformation to apply before we can fit our power law. ESDs come in a few flavours which encode the same information in different ways, we have SVD singular values (what we've been using so far) and the correlation matrix eigenvalues. The relationship between SVD singular values and correlation matrix eigenvalues are analogous to the relationship between standard deviation and variance. They encode the same information, but some statistical operations are expressed more naturally in one than the other. 
 
-Given a sample of the SVD singular values, we can get a sample of the layer correlation eigenvalues **simply by squaring them**. Another analogy to consider is the difference between speed and kinetic energy - some calculations are easier in one form than the other. Let's square our singular values, and fit a power law.
+Given a sample of the SVD singular values, we can get a sample of the correlation matrix eigenvalues **simply by squaring them**. Another analogy to consider is the difference between speed and kinetic energy - some calculations are easier in one form than the other. Let's square our singular values, and fit a power law.
 
 ![ESD of the  final layer of AlexNet with a fitted power law](./imgs/esd-alexnet-hist-log-pl-sq.png)
 
@@ -127,7 +127,7 @@ Interesting. Something to notice is that when we're dealing with a real network,
 WWFit(power_law xmin: 2.0464, alpha: 3.0199, sigma: 0.1523, data: 176)
 ```
 
-Beautiful. For more information on interpreting these alpha values, take a look at the references below.
+For more information on interpreting these alpha values, take a look at the references below.
 
 ### Further Reading:
 
