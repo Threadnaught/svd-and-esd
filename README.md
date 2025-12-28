@@ -75,7 +75,7 @@ And here is the magic of the ESD; we can take a vector space far too large to be
 
 ESD analysis is usually introduced towards the beginning of a course on Random Matrix Theory (RMT), surrounded by derivations and notation. While those are vital, there also is a real risk of leaving such a course without any intuitive sense of what's actually going on inside of these operations and spaces. In particular, RMT has led to theories describing the internal structure of a neural network with tools like [WeightWatcher](https://github.com/CalculatedContent/WeightWatcher). Neural networks are composed mostly of fancy matrix multiplications after all, and ESD analysis has shown an unreasonable level of generality in understanding how they work. It can do this without looking at training data or even knowing their intended purpose. Incidentally, my cookies have not recovered since discovering WeightWatcher.
 
-I have a confession to make; I have shown you the most boring type of ESD that exists. We've used a mathematical tool designed to measure correlation and structure to look at a matrix without any of either. The ESD distribution that we saw above in the IID normally distributed case follows the Marchenko–Pastur (MP) law. Let's look at a matrix which I prepared earlier.
+Unfortunately, I have shown you the most boring type of ESD that exists. We've used a mathematical tool designed to measure correlation and structure to look at a matrix without any of either. The ESD distribution that we saw above in the IID normally distributed case follows the Marchenko–Pastur (MP) law. Let's look at a matrix which I prepared earlier.
 
 ![heavy tailed histogram](./imgs/esd-heavy-hist.png)
 
@@ -117,11 +117,11 @@ Okay. Now let's try this analysis on a layer from a real, trained network; we're
 
 We only have one more transformation to apply before we can fit our power law. ESDs come in a few flavours which encode the same information in different ways, we have SVD singular values (what we've been using so far) and the correlation matrix eigenvalues. The relationship between SVD singular values and correlation matrix eigenvalues are analogous to the relationship between standard deviation and variance. They encode the same information, but some statistical operations are expressed more naturally in one than the other. 
 
-Given a sample of the SVD singular values, we can get a sample of the layer correlation eigenvalues **simply by squaring it**. Another analogy to consider is the difference between speed and kinetic energy - some calculations are easier in one form than the other. Let's square our singular values, and fit a power law.
+Given a sample of the SVD singular values, we can get a sample of the layer correlation eigenvalues **simply by squaring them**. Another analogy to consider is the difference between speed and kinetic energy - some calculations are easier in one form than the other. Let's square our singular values, and fit a power law.
 
 ![ESD of the  final layer of AlexNet with a fitted power law](./imgs/esd-alexnet-hist-log-pl-sq.png)
 
-Interesting. Something to notice is that when we're dealing with a real network, we rarely actually fit _all_ of the singular values. The is section below the fit `x_min` does not fit our power low. This is usually dismissed as noise in our analysis. Let's look at the parameters of our fit.
+Interesting. Something to notice is that when we're dealing with a real network, we rarely actually fit _all_ of the singular values. The is section below the fit `x_min` does not fit our power law. This is usually dismissed as noise in this analysis. Let's look at the parameters of our fit.
 
 ```
 WWFit(power_law xmin: 2.0464, alpha: 3.0199, sigma: 0.1523, data: 176)
@@ -133,4 +133,4 @@ Beautiful. For more information on interpreting these alpha values, take a look 
 
  - [Traditional and Heavy-Tailed Self Regularization in Neural Network Models](https://arxiv.org/abs/1901.08276) (Martin & Mahoney, 2019)
  - [WeightWatcher](https://github.com/CalculatedContent/WeightWatcher) on GitHub
- - [AlexNet]
+ - [AlexNet](https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) (Krizhevsky, Sutskever & Hinton, 2012)

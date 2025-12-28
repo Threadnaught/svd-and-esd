@@ -8,9 +8,9 @@ from weightwatcher.WW_powerlaw import WWFit
 dist = 'alexnet'
 plot_hist = True
 log = True
-fit_power_law = True
+fit_power_law = False
 full_ww_fit = False # Debug option to validate our calculations vs ww
-square_s = True
+square_s = False
 
 alpha = 2.5
 x_min = 10
@@ -91,7 +91,7 @@ ax = plt.gca()
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.xlabel('Singular value' + ' squared' if square_s else '')
+plt.xlabel('Singular value' + (' squared' if square_s else ''))
 
 if plot_hist:
     plt.hist(S, bins=50, color='black', density=True, log=log)
