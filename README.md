@@ -35,9 +35,9 @@ I have given myself some artistic license in this visualisation; the basis vecto
 
 > SVD is typically computed all at once rather than basis by basis, but this model is very useful in thinking about what exactly SVD is doing.
 
-## Empirical Spectral Distribution
+## ESD visualisation
 
-> In this section, we will be working in `./empirical_spectral_distribution.py` and `./coords_and_svd.py`.
+> In this section, we will be working in `./esd_visualisation.py` and `./coords_and_svd.py`.
 
 Vector spaces become very hard to visualise past 3 dimensions, but SVD remains useful. Let's focus on one type of analysis which can be performed, taking the Empirical Spectral Distribution (ESD).
 
@@ -85,7 +85,7 @@ This is the mythical power law Heavy-Tailed matrix. Unfortunately, a lot of the 
 
 The distribution of singular values here follow a power law, which can be seen from all of those singular values hanging out on their own at the very high end. When a neural network is training well, your singular values tend to look a little like this. The specific type and shape of the power law can tell you a lot about how the layers of your networks are training.
 
-> A confession; power law Heavy-Tailed matrices are confusing. This project (beautifully) taught me that I didn't understand them as well as I thought I did. The above section previously displayed a lognormal-ish matrix which failed to fit a power law at all. At one point, I even relented and constructed a correct one with gradient descent, which is machine learning speak for 'I don't know how to make this analytically'. The analytical approach I used in the end was actually very simple (albeit heavily commented), if you want to see it take a look at the block that starts `elif dist == 'heavy':` in `./empirical_spectral_distribution.py`.
+> A confession; power law Heavy-Tailed matrices are confusing. This project (beautifully) taught me that I didn't understand them as well as I thought I did. The above section previously displayed a lognormal-ish matrix which failed to fit a power law at all. At one point, I even relented and constructed a correct one with gradient descent, which is machine learning speak for 'I don't know how to make this analytically'. The analytical approach I used in the end was actually very simple (albeit heavily commented), if you want to see it take a look at the block that starts `elif dist == 'heavy':` in `./esd_visualisation.py`.
 
 Okay, I keep saying 'power law', but how do we know what that means? The power law distribution used here is parameterised by two variables - `x_min`, which dictates the lower bound, and `alpha`, which causes the tail to drop off faster when increased. If we use WeightWatcher's builtin fitter to measure the properties of the ESD's power law, we get the following output;
 
